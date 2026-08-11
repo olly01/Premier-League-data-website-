@@ -15,9 +15,8 @@ newdf = df.copy()
 df.rename(columns={"HomeTeam":"Team", "AwayTeam":"Opponent", "FTHG":"GoalsFor", "FTAG":"GoalsAgainst"}, inplace=True)
 df["Venue"] = "Home" #Changing column names to prepare for concat and adding a new column 
 
-newdf.rename(columns={ "AwayTeam": "Team", "HomeTeam": "Opponent", "FTHG": "GoalsAgainst", "FTAG":"GoalsFor"}, inplace=True)
+newdf.rename(columns={ "AwayTeam": "Team", "HomeTeam": "Opponent", "FTHG": "GoalsAgainst", "FTAG":"GoalsFor", }, inplace=True)
 newdf["Venue"] = "Away"
 attempt = [df,newdf]
 result = pd.concat(attempt)
 result.to_csv("Season-2526Updated.csv", index = False)
-results.tosql()
