@@ -31,9 +31,16 @@ app.add_middleware(
 )
 
 
-@app.get("/")
-def root():
-    return {"message": car}
+@app.get("/team/{team_name}")
+def getTeam(team_name):
+    team_name = team_name.capitalize()
+    db = sqlite3.connect('Premierleague_table.db')
+    db.row_factory = sqlite3.Row
+    cursor = db.cursor()
+   
+    search = cursor.execute("SELECT * FROM table_2526 WHERE Team = ?",(team_name,))
+    result = search.fetchall()
+    return result;
 
 
 
@@ -53,4 +60,4 @@ def csvToSQL():
 
 if __name__ == "__main__":
     csvToSQL()
-   # uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
