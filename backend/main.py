@@ -19,7 +19,7 @@ car = "hosue"
 app = FastAPI()
 
 origins = [
-    "https://localhost:3000"
+    "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -29,35 +29,51 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers =["*"],
 )
+def dbconnect():
+     db = sqlite3.connect('Premierleague_table.db')
+     db.row_factory = sqlite3.Row
+     cursor = db.cursor()
+     return cursor
+
+@app.get("/teamgoals/{team_name}")
+def getGoals(team_name):
+     team_name = team_name.capitalize()
+
+@app.get("/allteams")
+def getAllTeams():
+     cursor = dbconnect()
+     search = cursor.execute("SELECT DISTINCT Team FROM table_2526 ORDER BY Team ASC")
+     result = [row[0] for row in search.fetchall()]
+     return result
+
 
 
 @app.get("/team/{team_name}")
 def getTeam(team_name):
-    team_name = team_name.capitalize()
+    
     db = sqlite3.connect('Premierleague_table.db')
     db.row_factory = sqlite3.Row
     cursor = db.cursor()
    
-    search = cursor.execute("SELECT * FROM table_2526 WHERE Team = ?",(team_name,))
+    search = cursor.execute("SELECT * FROM table_2526 WHERE Team = ? ORDER BY Date ASC",(team_name,) )
     result = search.fetchall()
-    return result;
+    return result
 
 
 
 def csvToSQL():
     df = pd.read_csv('./csv/Season-2526Updated.csv')
-    
     db = sqlite3.connect('Premierleague_table.db')
     cursor = db.cursor()
-    
-    cursor.execute("CREATE TABLE IF NOT EXISTS table_2526(GameID INTEGER Primary Key, Date TEXT, Team TEXT, Opponent TEXT, GoalsFor INT, GoalsAgainst INT, FTR INT, HTHG INT, HTAG INT, HTR INT, Referee TEXT, HS INT, [AS] INT, HST INT, AST INT, HF INT, AF INT, HC INT, AC INT, HY INT, AY INT, HR INT, AR INT, Venue TEXT);")
-    print(cursor.execute("SELECT * FROM table_2526 ;"))
+    cursor.execute("DROP TABLE IF EXISTS table_2526")
+    db.commit()
+    cursor.execute("CREATE TABLE IF NOT EXISTS table_2526(GameID INTEGER Primary Key, Date DATE, Team TEXT, Opponent TEXT, GoalsFor INT, GoalsAgainst INT, FTR INT, HTHG INT, HTAG INT, HTR INT, Referee TEXT, HS INT, [AS] INT, HST INT, AST INT, HF INT, AF INT, HC INT, AC INT, HY INT, AY INT, HR INT, AR INT, Venue TEXT);")
     for row in df.itertuples(index=False):
             cursor.execute("INSERT INTO table_2526(Date, Team, Opponent, GoalsFor, GoalsAgainst, FTR, HTHG, HTAG, HTR, Referee, HS, [AS], HST, AST, HF, AF, HC, AC, HY, AY, HR, AR, Venue) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", row)
     db.commit()
-    self = cursor.execute("SELECT * FROM table_2526 ;")
-    print(self.fetchone())
+    self = cursor.execute("SELECT DISTINCT Team FROM table_2526 WHERE Team LIKE '%Villa%' ")
+    print("table check")
+    print(self.fetchall())
 
 if __name__ == "__main__":
-    csvToSQL()
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
