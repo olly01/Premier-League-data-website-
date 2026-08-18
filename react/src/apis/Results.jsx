@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import api from "../api.js";
 import SearchTeamForm from './searchTeamForm.jsx';
 import DropdownMenu from './dropdownMenu.jsx';
+
 const FixtureList = () => {
     const[fixtures, setFixtures] = useState([]);
 
@@ -22,9 +23,9 @@ const FixtureList = () => {
                 Fixture List
             </h2>
             <DropdownMenu fetchFixtures={fetchFixtures} />
-            <table>
+            <table className="border-collapse w-full">
                 <thead>
-                <tr><th>Team</th><th>Opponent</th></tr>
+                <tr><th>Team</th><th>Opponent</th><th>Venue</th><th>Goals For</th><th>Goals Against</th><th>Date</th></tr>
                 </thead>
                 <tbody>
                 {fixtures.map((fixture, index) =>
@@ -32,6 +33,9 @@ const FixtureList = () => {
                     <td>{fixture.Team}</td>
                     <td>{fixture.Opponent}</td>
                     <td>{fixture.Venue}</td>
+                    
+                    <td>{fixture.GoalsFor}</td>
+                    <td>{fixture.GoalsAgainst}</td>
                     <td>{fixture.Date}</td>
                     </tr>
                 )}
