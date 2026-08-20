@@ -4,12 +4,15 @@ import SearchTeamForm from './searchTeamForm.jsx';
 import DropdownMenu from './dropdownMenu.jsx';
 
 const FixtureList = () => {
+
     const[fixtures, setFixtures] = useState([]);
 
     const fetchFixtures = async(teamName) => { 
+
         try{
             const response = await api.get(`/team/${encodeURIComponent(teamName)}`);
             setFixtures(response.data);
+
         }
         catch(error){
             console.error("Error fetching fixtures", error)
@@ -33,7 +36,6 @@ const FixtureList = () => {
                     <td>{fixture.Team}</td>
                     <td>{fixture.Opponent}</td>
                     <td>{fixture.Venue}</td>
-                    
                     <td>{fixture.GoalsFor}</td>
                     <td>{fixture.GoalsAgainst}</td>
                     <td>{fixture.Date}</td>

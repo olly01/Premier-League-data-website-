@@ -1,9 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import api from "../api.js";
+
+
+
 const DropdownMenu = ({fetchFixtures}) => {
+
     const[teams, setTeams] = useState([]);
+
     const[selectedTeam, setSelected] = useState('')
+
+
     const fetchTeams= async() => {
+
         try{
             const response = await api.get('/allteams');
             setTeams(response.data);
