@@ -28,7 +28,7 @@ const DropdownMenu = ({fetchFixtures}) => {
     return(
         <>
         <label htmlFor ="team">Choose a team</label>
-        <select name = "team" id = "team" onChange={(e) => {setSelected(e.target.value); fetchFixtures(e.target.value)}} value = {selectedTeam}> 
+        <select name = "team" id = "team" onSelect-{(e) => {setSelected(e.target.value); fetchFixtures(e.target.value)}}onChange={(e) => {setSelected(e.target.value); fetchFixtures(e.target.value)}} value = {selectedTeam} > 
         {teams.map((team) =>
             <option key = {team} value = {team}>{team}</option>
         )}
