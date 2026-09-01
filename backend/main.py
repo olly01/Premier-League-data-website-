@@ -19,7 +19,7 @@ car = "hosue"
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173"
+    "https://premierleaguedata.netlify.app/"
 ]
 
 app.add_middleware(
